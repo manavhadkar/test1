@@ -1,0 +1,14 @@
+﻿Practical 2
+
+scala> println("Count:"+rdd6.count())
+scala> val firstRecord=rdd6.first()
+scala> println("First Record of RDD :"+firstRecord) 
+scala> val lastRecord=rdd6.max() 
+scala> println("Last Record of RDD :"+lastRecord) 
+scala> val totalWordCount=rdd6.reduce((a,b)=>(a._1+b._1,a._2))
+scala> println("DataReduce Record :"+totalWordCount._1) 
+scala> val data3=rdd6.take(3)
+scala> data3.foreach(println)
+scala> val datacollect=rdd6.collect()
+scala> datacollect.foreach(println)
+scala> rdd6.saveAsTextFile("file:///home/cloudera/Data_wordCountOutput")

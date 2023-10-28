@@ -1,0 +1,22 @@
+srj practical 4
+#Vector Error Correction Model
+import numpy as np
+import pandas as pd
+from statsmodels.tsa.vector_ar.vecm import VECM
+from statsmodels.tsa.vector_ar.vecm import select_coint_rank
+# Generate some example data
+np.random.seed(0)
+nobs = 100
+data = np.random.randn(nobs, 2)
+data[:, 1] = 2 * data[:, 0] + np.random.randn(nobs) # Create a cointegrated relationship
+# Create a DataFrame from the generated data
+df = pd.DataFrame(data, columns=['series1', 'series2'])
+# Estimate the cointegration rank using the trace statistic
+coint_rank_result = select_coint_rank(df, det_order=-1, k_ar_diff=2)
+# Extract the cointegration rank from the result object
+coint_rank = coint_rank_result.rank
+# Initialize and fit the VECM model
+model = VECM(df, k_ar_diff=2, coint_rank=coint_rank)
+results = model.fit()
+# Print the summary of the model
+print(results.summary())

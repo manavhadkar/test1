@@ -1,0 +1,14 @@
+Practical 1
+spark-shell
+val rddl=sc.textFile("file:///home/cloudera/Data_WordCount")
+rdd1.count()
+val rdd2=rdd1.flatMap(f=>f.split(" "))
+rdd2.foreach(println)
+val rdd3=rrd2.map(m=>(m,1))
+rdd3.foreach(println)
+val rdd4=rdd3.filter(a=>a._1.startsWith("h"))
+rdd4.foreach(println)
+val rdd5=rdd4.reduceByKey(_+_)
+rdd5.foreach(println)
+val rdd6=rdd5.map(a=>(a._2,a._1)).sortByKey()
+rdd6.foreach(println)

@@ -1,0 +1,52 @@
+srj practical 3
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import numpy as np
+import pandas as pd
+from statsmodels.tsa.api import VAR
+from sklearn.linear_model import RidgeCV
+np.random.seed(0)
+nobs = 100
+data = np.random.randn(nobs, 2) # 2 variables
+# Convert data to DataFrame
+columns = ['variable1', 'variable2']
+df = pd.DataFrame(data, columns=columns)
+# Create lagged dataset
+lags = 2
+data_lagged = df.diff().dropna()
+for lag in range(1, lags + 1):
+#1st time loop will take value 1 and run ,next it will take value 2
+	for col in columns: #columns are variable1 and variable2
+		df[f'{col}_lag{lag}'] = data_lagged[col].shift(lag)
+print(df)
+
+# Drop rows with missing values
+df = df.dropna()
+# Split data into training and testing sets
+train_size = int(0.8 * len(df))
+train_data = df.iloc[:train_size]
+test_data = df.iloc[train_size:]
+# Fit Ridge VAR model
+X_train = train_data.drop(columns=columns)
+
+y_train = train_data[columns]
+ridge_model = RidgeCV(alphas=[0.01, 0.1, 1.0, 10.0]) # Adjust alphas as needed
+ridge_model.fit(X_train, y_train)
+coefficients = ridge_model.coef_
+# Forecast using the model
+X_test = test_data.drop(columns=columns)
+forecast = ridge_model.predict(X_test)
+# Convert forecast results to DataFrame
+forecast_df = pd.DataFrame(forecast, columns=columns, index=test_data.index)
+# Plot original data and forecasted values
+import matplotlib.pyplot as plt
+plt.figure(figsize=(16, 10))
+plt.plot(df, label='Original Data')
+plt.plot(forecast_df, label='Forecast', linestyle='dashed')
+plt.legend()
+plt.title('Regularized VAR Forecast')
+plt.xlabel('Time')
+plt.ylabel('Values')
+plt.show()

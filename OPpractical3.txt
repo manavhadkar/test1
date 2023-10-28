@@ -1,0 +1,9 @@
+practical3
+spark-shell
+scala> var ip_marks-sc.textFile("file:///home/cloudera/marks.csv")
+scala ip_marks.collect()
+scala var List_marks=ip_marks.map(x=>(x.split(',')(0),List(x.split(',')(1).toFloat,x.split(',')(2).toFloat,.....x.split(',')(6).toFloat)))# asper col exp rollno
+scala> List_marks.collect()
+scala> var per_marks=List_marks.mapValues(x=>x.sum/x.length)
+scala> per_marks.collect()
+scala> per_marks.saveAsTextFile("file:///home/cloudera/marks_output.csv")

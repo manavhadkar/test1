@@ -1,0 +1,24 @@
+srj practical 2
+import numpy as np
+from scipy.optimize import minimize
+# np.random.seed(42)
+n = 100
+x = np.random.rand(n)
+epsilon = np.random.normal(0, 1, n)
+beta_true = [2.5, 1.7]
+y = beta_true[0] + beta_true[1] * x + epsilon
+#beta_0,beta_1 = [2.5, 1.7]
+#y = beta_0 + beta_1* x + epsilon
+def moment_conditions(params, x, y):
+    beta0, beta1 = params
+    return y - beta0 - beta1 * x
+def gmm_objective(params, x, y):
+    moments = moment_conditions(params, x, y)
+    return moments.T @ moments
+initial_guess = [0.5, 0.5]
+result = minimize(gmm_objective, initial_guess, args=(x, y))
+estimated_beta0, estimated_beta1 = result.x
+print("Estimated beta0:", estimated_beta0) #my expeiment
+print("Actual beta0:", beta_true[0])
+print("Estimated beta1:", estimated_beta1)
+print("Actual beta1:", beta_true[1])

@@ -1,0 +1,17 @@
+srj Practical 1
+import numpy as np
+from scipy.optimize import leastsq
+#Here x and y are actual and pred values resp
+x = np.array([22,44,21,56,77])
+y = np.array([56,88,90,33,32])
+def linear_model(params, x):
+    m, c = params
+    return m * x + c
+def residuals(params, y, x):
+    return y - linear_model(params, x)
+initial_params = [1, 1]
+result = leastsq(residuals,initial_params,args=(y,x))
+#Extract the optimized parameters
+m_opt,c_opt= result[0]
+print(f"Optimized slope (m): {m_opt}")
+print(f"Optimized intercept (c): {c_opt}")
